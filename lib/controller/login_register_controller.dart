@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_8/helper/shared_preferences.dart';
@@ -17,13 +19,15 @@ class LoginRegisterController extends GetxController {
   var userAddress;
   var userName;
 
+  RxInt counter = 0.obs;
+  RxBool isDisable = false.obs;
+
   registerDetails() async {
     await DetailsStoring.setName(name.text);
     await DetailsStoring.setEmail(registerEmail.text);
     await DetailsStoring.setPassword(registerPassword.text);
     await DetailsStoring.setAddress(address.text);
     await DetailsStoring.setId('NotLogged');
-
     update();
   }
 
@@ -44,6 +48,16 @@ class LoginRegisterController extends GetxController {
         backgroundColor: Colors.white,
         margin: const EdgeInsets.all(10),
       );
+      counter.value++;
+      if (counter.value == 3) {
+        log("${isDisable.value}");
+        log("this is working ");
+        isDisable.value = true;
+        log("${isDisable.value}");
+        resetButton();
+        update();
+      }
+      log("$counter ++++ this is the counder");
     }
     update();
   }
@@ -69,6 +83,15 @@ class LoginRegisterController extends GetxController {
     registerEmail.clear();
     registerPassword.clear();
     address.clear();
+  }
+
+  resetButton() {
+    resetFields();
+    Timer.periodic(const Duration(minutes: 10), (Timer timer) {
+      counter.value = 1;
+      isDisable.value = false;
+      Get.offAll(() => LoginPage())?.then((value) => timer.cancel());
+    });
   }
 
   @override

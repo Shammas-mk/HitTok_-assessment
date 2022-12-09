@@ -19,87 +19,95 @@ class LoginPage extends StatelessWidget {
         child: Form(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Login with Creadentials",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 30),
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                controller: loginRegisterController.email,
-                decoration: InputDecoration(
-                  hintText: 'Email',
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: const BorderSide(color: Colors.blue)),
-                  contentPadding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+          child: GetBuilder<LoginRegisterController>(builder: (controller) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Login with Creadentials",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                cursorColor: Colors.white,
-                style: const TextStyle(color: Colors.white),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Enter a valid Email';
-                  } else if (!value.contains('@')) {
-                    return 'Not an email';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 30),
-              TextFormField(
-                obscureText: true,
-                controller: loginRegisterController.password,
-                decoration: InputDecoration(
-                  hintText: 'Password',
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
+                const SizedBox(height: 30),
+                TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  controller: loginRegisterController.email,
+                  decoration: InputDecoration(
+                    hintText: 'Email',
+                    enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      borderSide: const BorderSide(color: Colors.blue)),
-                  contentPadding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: const BorderSide(color: Colors.blue)),
+                    contentPadding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                  ),
+                  cursorColor: Colors.white,
+                  style: const TextStyle(color: Colors.white),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Enter a valid Email';
+                    } else if (!value.contains('@')) {
+                      return 'Not an email';
+                    }
+                    return null;
+                  },
                 ),
-                cursorColor: Colors.white,
-                style: const TextStyle(color: Colors.white),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Enter a valid Password';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 30),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        loginRegisterController.loginDetails();
-                      }
-                    },
-                    child: const Text("Login")),
-              ),
-              const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("New user ?"),
-                  TextButton(
-                      onPressed: () {
-                        loginRegisterController.resetFields();
-                        Get.to(() => RegisterPage());
-                      },
-                      child: const Text("Sign Up"))
-                ],
-              ),
-            ],
-          ),
+                const SizedBox(height: 30),
+                TextFormField(
+                  obscureText: true,
+                  controller: loginRegisterController.password,
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: const BorderSide(color: Colors.blue)),
+                    contentPadding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                  ),
+                  cursorColor: Colors.white,
+                  style: const TextStyle(color: Colors.white),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Enter a valid Password';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 30),
+                SizedBox(
+                    width: double.infinity,
+                    child: controller.isDisable.value == false
+                        ? ElevatedButton(
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                loginRegisterController.loginDetails();
+                              }
+                            },
+                            child: const Text("Login"))
+                        : ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey),
+                            onPressed: () {},
+                            child: const Text("---"),
+                          )),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("New user ?"),
+                    TextButton(
+                        onPressed: () {
+                          loginRegisterController.resetFields();
+                          Get.to(() => RegisterPage());
+                        },
+                        child: const Text("Sign Up"))
+                  ],
+                ),
+              ],
+            );
+          }),
         ),
       ),
     );
